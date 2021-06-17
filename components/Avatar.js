@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../utils/supabaseClient'
+//import Image from 'next/image'
 
 export default function Avatar({ url, size, onUpload }) {
   const [avatarUrl, setAvatarUrl] = useState(null)
@@ -37,6 +38,7 @@ export default function Avatar({ url, size, onUpload }) {
       const filePath = `${fileName}`
 
       if (url) {
+        console.log(url)
         let { error: removeError } = await supabase.storage
           .from('avatars')
           .remove([url])
@@ -64,12 +66,21 @@ export default function Avatar({ url, size, onUpload }) {
   return (
     <div>
       {avatarUrl? (
+        // eslint-disable-next-line @next/next/no-img-element
         <img
           src={avatarUrl}
           alt="Avatar"
-                  className="avatar image"
-                  style={{width:size, height:size}}
+          className="avatar image"
+          style={{ height: size, width:size}}
         />
+
+        /* <Image
+          src={avatarUrl}
+          alt="Avatar"
+          className="avatar image"
+          height={size}
+          width={size}
+        />  */
       ) : (
         <div className="avatar no-image" style={{ height: size, width: size }} />
       )}
