@@ -3,4 +3,5 @@ module.exports = {
   images: {
     domains: ['hqiqbydbazabglismmup.supabase.co'],
   },
+    productionBrowserSourceMaps: true,
 }
