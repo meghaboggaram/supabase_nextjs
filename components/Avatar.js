@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../utils/supabaseClient'
-//import Image from 'next/image'
+import Image from 'next/image'
 
 export default function Avatar({ url, size, onUpload }) {
   const [avatarUrl, setAvatarUrl] = useState(null)
@@ -10,14 +10,16 @@ export default function Avatar({ url, size, onUpload }) {
     if (url) downloadImage(url)
   }, [url])
 
-  async function downloadImage(path) {
+   function downloadImage(path) {
     try {
-      const { data, error } = await supabase.storage.from('avatars').download(path)
+      const { data, error } = supabase.storage.from('avatars').getPublicUrl(path)
       if (error) {
         throw error
       }
-      const url = URL.createObjectURL(data)
-      setAvatarUrl(url)
+      console.log('getPublicUrl', data)
+      const url = data.publicURL
+    //  const url = URL.createObjectURL(data) // use when using download API
+      setAvatarUrl(url) //data.publicURL
     } catch (error) {
       console.log('Error downloading image: ', error.message)
     }
@@ -66,21 +68,20 @@ export default function Avatar({ url, size, onUpload }) {
   return (
     <div>
       {avatarUrl? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
+       /*  <img
           src={avatarUrl}
           alt="Avatar"
           className="avatar image"
           style={{ height: size, width:size}}
-        />
+        /> */
 
-        /* <Image
+        <Image
           src={avatarUrl}
           alt="Avatar"
           className="avatar image"
           height={size}
           width={size}
-        />  */
+        /> 
       ) : (
         <div className="avatar no-image" style={{ height: size, width: size }} />
       )}
